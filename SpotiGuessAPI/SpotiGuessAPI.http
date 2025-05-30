@@ -1,0 +1,6 @@
+@SpotiGuessAPI_HostAddress = http://localhost:5207
+
+GET {{SpotiGuessAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
