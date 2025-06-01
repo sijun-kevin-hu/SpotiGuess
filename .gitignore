@@ -11,3 +11,4 @@ frontend/dist/
 # Common
 .vscode/
 *.log
+.env

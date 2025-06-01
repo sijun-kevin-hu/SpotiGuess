@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
-using Microsoft.AspNetCore.Http;
+using DotNetEnv;
 
 namespace SpotiGuessAPI
 {
@@ -8,11 +8,25 @@ namespace SpotiGuessAPI
     [Route("api/auth")]
     public class SpotifyAuthController : ControllerBase
     {
-        private readonly string clientId = "2a9264709c004ef096a93aa1fd2992df";
-        private readonly string clientSecret = "ed8aae92e0cd420ca4ab8af6d7b0143d";
-        private readonly System.Uri redirectUri = new System.Uri("http://127.0.0.1:5207/api/auth/callback");
+        private readonly string clientId;
+        private readonly string clientSecret;
+        private readonly System.Uri redirectUri;
         private const string OAuthStateKey = "OAuthState";
 
+        public SpotifyAuthController()
+        {
+            clientId = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID")
+                ?? throw new InvalidOperationException("Missing environment variable: SPOTIFY_CLIENT_ID");
+
+            clientSecret = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET")
+                ?? throw new InvalidOperationException("Missing environment variable: SPOTIFY_CLIENT_SECRET");
+
+            var redirectUriStr = Environment.GetEnvironmentVariable("SPOTIFY_REDIRECT_URI")
+                ?? throw new InvalidOperationException("Missing environment variable: SPOTIFY_REDIRECT_URI");
+
+            redirectUri = new System.Uri(redirectUriStr);
+        }
+        
         [HttpGet("login")]
         public IActionResult Login()
         {

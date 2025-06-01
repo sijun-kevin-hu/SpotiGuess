@@ -1,4 +1,12 @@
+using DotNetEnv;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Load env vars from .env file
+DotNetEnv.Env.Load();
+
+builder.Configuration
+    .AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
