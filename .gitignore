@@ -1,1 +1,13 @@
-/.vscode
+# .NET
+SpotiGuessAPI/bin
+SpotiGuessAPI/obj
+*.user
+*.suo
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+
+# Common
+.vscode/
+*.log
