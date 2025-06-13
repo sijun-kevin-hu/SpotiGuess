@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json;
 using SpotifyAPI.Web;
 
 namespace SpotiGuessAPI.Controllers
@@ -9,27 +7,29 @@ namespace SpotiGuessAPI.Controllers
     [Route("api/[controller]")]
     public class SpotifyAPIController : ControllerBase
     {
-        private ISpotifyClient? spotify;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public SpotifyAPIController(IHttpContextAccessor httpContextAccessor)
         {
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        private ISpotifyClient? GetSpotifyClient()
+        {
             var accessToken = httpContextAccessor.HttpContext?.Session.GetString("SpotifyAccessToken");
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                spotify = new SpotifyClient(accessToken);
-            }
-            else
-            {
-                spotify = null;
-                throw new Exception("No access token");
-            }
+            return !string.IsNullOrEmpty(accessToken) ? new SpotifyClient(accessToken) : null;
         }
 
         // GET: api/spotifyapi/top-tracks
         // Gets User's Top Tracks
         [HttpGet("top-tracks")]
-        public async Task<IActionResult> GetTopTracks()
+        public async Task<IActionResult> GetTopTracks(
+            [FromQuery] string timeRange = "medium_term",
+            [FromQuery] int limit = 20
+        )
         {
+            var spotify = GetSpotifyClient();
+
             if (spotify == null)
             {
                 return Unauthorized("User not authenticated. Please log in.");
@@ -56,8 +56,13 @@ namespace SpotiGuessAPI.Controllers
         // GET: api/spotifyapi/top-artists
         // Gets User's Top Artists
         [HttpGet("top-artists")]
-        public async Task<IActionResult> GetTopArtists()
+        public async Task<IActionResult> GetTopArtists(
+            [FromQuery] string timeRange = "medium_term",
+            [FromQuery] int limit = 20
+        )
         {
+            var spotify = GetSpotifyClient();
+
             if (spotify == null)
             {
                 return Unauthorized("User not authenticated. Please log in");

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 using DotNetEnv;
 
-namespace SpotiGuessAPI
+namespace SpotiGuessAPI.Controllers
 {
     [ApiController]
     [Route("api/auth")]
@@ -75,7 +75,7 @@ namespace SpotiGuessAPI
                     Console.WriteLine($"Error setting session: {ex.Message}");
                 }
 
-                return Redirect("/api/spotifyapi/top-tracks");
+                return Redirect("http://127.0.0.1:4200/");
             }
             catch (Exception ex)
             {
