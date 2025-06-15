@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 
@@ -24,19 +25,34 @@ namespace SpotiGuessAPI.Controllers
         // Gets User's Top Tracks
         [HttpGet("top-tracks")]
         public async Task<IActionResult> GetTopTracks(
-            [FromQuery] string timeRange = "medium_term",
-            [FromQuery] int limit = 20
+            [FromQuery] PersonalizationTopRequest.TimeRange? timeRange,
+            [FromQuery] int limit
         )
-        {
-            var spotify = GetSpotifyClient();
+        {   
+            if (!timeRange.HasValue)
+            {
+                return BadRequest("Parameter 'timeRange' is required.");
+            }
 
+            if (limit <= 0 || limit > 50)
+            {
+                return BadRequest("Parameter 'limit' must be between 1 and 50");
+            }
+
+            var spotify = GetSpotifyClient();
             if (spotify == null)
             {
                 return Unauthorized("User not authenticated. Please log in.");
             }
             try
             {
-                var tracks = await spotify.Personalization.GetTopTracks();
+                var request = new PersonalizationTopRequest
+                {
+                    Limit = limit,
+                    TimeRangeParam = timeRange
+                };
+
+                var tracks = await spotify.Personalization.GetTopTracks(request);
 
                 if (tracks != null)
                 {

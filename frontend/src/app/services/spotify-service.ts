@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FullTrack } from '../models/tracks-model';
 @Injectable({
@@ -8,7 +8,13 @@ import { FullTrack } from '../models/tracks-model';
 export class SpotifyService {
   constructor(private http: HttpClient) { }
 
-  getTopTracks(): Observable<FullTrack[]> {
-    return this.http.get<FullTrack[]>('/api/spotifyapi/top-tracks');
+  getTopTracks(
+    timeRange: string,
+    limit: number,
+  ): Observable<FullTrack[]> {
+    let params = new HttpParams()
+      .set('timeRange', timeRange)
+      .set('limit', limit.toString())
+    return this.http.get<FullTrack[]>('/api/spotifyapi/top-tracks', { params });
   }
 }

@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home-component.html',
   styleUrl: './home-component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   tracks: FullTrack[] = [];
 
   constructor(private spotifyService: SpotifyService) {}
 
   ngOnInit(): void {
-    this.spotifyService.getTopTracks().subscribe({
+    this.spotifyService.getTopTracks('LongTerm', 50).subscribe({
       next: (data) => {
         this.tracks = data;
         console.log(data);

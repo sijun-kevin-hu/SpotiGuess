@@ -3,8 +3,8 @@ export interface FullTrack {
     id: string;
     artists: SimpleArtist[];
     album: SimpleAlbum;
-    previewUrl: string | null;
-    durationMs: number;
+    preview_url: string | null;
+    duration_ms: number;
     popularity: number;
 }
 
@@ -16,7 +16,7 @@ export interface SimpleArtist {
 export interface SimpleAlbum {
     name: string;
     id: string;
-    releaseDate: string;
+    release_date: string;
     images: AlbumImage[];
 }
 
